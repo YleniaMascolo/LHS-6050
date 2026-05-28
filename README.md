@@ -39,6 +39,9 @@ The repository is organized as follows:
 └── tests/
     └── recovery_injection.py      # Injection-recovery tests to validate GP sensitivity
 ```
+Additional data [here](https://drive.google.com/drive/folders/14kszrij8drW1fSgP8EOUyYQ7x352nvvN?usp=share_link):
+- MCMC joint-fit posteriors from the best-reported model (used in radial_velocity_plot.ipynb)
+- NASA Exoplanet Archive DataFrame (used in diagrams.ipynb) 
 
 To run the notebooks and scripts, please install the following dependencies:
 
