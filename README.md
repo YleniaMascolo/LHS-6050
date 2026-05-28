@@ -49,10 +49,12 @@ To run the notebooks and scripts, please install the following dependencies:
 * [emcee](https://github.com/dfm/emcee) 
 * [corner](https://github.com/dfm/corner.py) 
 * [astropy](https://github.com/astropy/astropy) 
-* [batman-package](https://github.com/lkreidberg/batman) 
+* [batman-package](https://github.com/lkreidberg/batman)
+* [radvel](https://github.com/California-Planet-Search/radvel)
+* [seaborn](https://github.com/mwaskom/seaborn)
 
 ```bash
-pip install numpy pandas matplotlib scipy emcee corner astropy batman-package
+pip install numpy pandas matplotlib scipy emcee corner astropy batman-package radvel seaborn
 ```
 
 
