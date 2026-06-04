@@ -36,8 +36,13 @@ The repository is organized as follows:
 │   ├── pipeline_comparison_plot.ipynb # Visual assessment of different RV extraction techniques
 │   └── diagrams.ipynb             # M-R and M-density diagrams, HZ and system overview
 │
-└── tests/
-    └── recovery_injection.py      # Injection-recovery tests to validate GP sensitivity
+├── tests/
+│   └── recovery_injection.py      # Injection-recovery tests to validate GP sensitivity
+|
+└── interior_structure_model/      # Folder with PDF plots and Jupyter notebooks for interior structure model using ExoMDN
+    ├── lhs6050b_samples.parquet   # Output from ExoMDN model in .ipynb 
+    ├── plot_ridge_lhs6050b.ipynb  # Ridgeplot and the standard ExoMDN cornerplot
+    └── run_exomdn_lhs6050b.ipynb  # Inference for ExoMDN model using mass radius and equilibrium temperature of LHS 6050b
 ```
 Additional data [here](https://drive.google.com/drive/folders/14kszrij8drW1fSgP8EOUyYQ7x352nvvN?usp=share_link):
 - MCMC joint-fit posteriors from the best-reported model (used in radial_velocity_plot.ipynb)
