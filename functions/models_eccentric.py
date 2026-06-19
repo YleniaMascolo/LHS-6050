@@ -77,8 +77,6 @@ def planetmodel(theta, t):
     t0, per, h, k, krv, gamma, *_ = theta 
     ecc = h**2 + k**2
     w_pl = np.arctan2(h, k) 
-
-    # radvel utility uses the star's omega to find the star's periastron time
     tp = radvel.orbit.timetrans_to_timeperi(t0, per, ecc, w_pl)
     t_array = np.array(t)
     params = [per, tp, ecc, w_pl, krv]
