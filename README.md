@@ -48,7 +48,13 @@ Additional data [here](https://drive.google.com/drive/folders/14kszrij8drW1fSgP8
 - MCMC joint-fit posteriors from the best-reported model (used in radial_velocity_plot.ipynb)
 - NASA Exoplanet Archive DataFrame (used in diagrams.ipynb) 
 
-To run the notebooks and scripts, please install the following dependencies:
+## System Requirements and Installation Guide
+
+Please see the 'requirements.txt' file for version numbers of all packages associated with the Python environment used to run codes in this repository. This software has been tested on MacOS Tahoe 26.4.1 operating systems. Using a HPC is preferred.
+There is no non-standard hardware required, although this code can make use of multiprocessing.
+
+To run the notebooks and scripts, please install the following dependencies. 
+Typical install time: 30 minutes.
 
 * [numpy](https://github.com/numpy/numpy) 
 * [pandas](https://github.com/pandas-dev/pandas) 
@@ -60,10 +66,23 @@ To run the notebooks and scripts, please install the following dependencies:
 * [batman-package](https://github.com/lkreidberg/batman)
 * [radvel](https://github.com/California-Planet-Search/radvel)
 * [seaborn](https://github.com/mwaskom/seaborn)
+* [ExoMDN](https://github.com/philippbaumeister/ExoMDN.git)
 
 ```bash
-pip install numpy pandas matplotlib scipy emcee corner astropy batman-package radvel seaborn
+pip install numpy pandas matplotlib scipy emcee corner astropy batman-package radvel seaborn exomdn
 ```
 
+## Instructions for Use
 
+Before running the code, ensure to have an active Python environment with the required dependencies installed.
 
+To run the analysis, you must keep the directory structure of the repository intact. The scripts interact with each other as follows:
+* [datasets/]: Contains all the raw and processed observational data. 
+* [functions/]: Contains the numerical, statistical, and MCMC modules. These python files are core libraries automatically imported by the main execution scripts.
+* [GlobalFit/]: Contains the main executable scripts that orchestrate the entire analysis.
+* [tests/]: Contains a test file for Gaussian Process sensitivity. 
+You do not need to run the files inside [functions/] individually. You only need to execute one of the main scripts inside the [GlobalFit/] or [tests/] directories, depending on the orbital model assumption.
+
+Once the global fit is complete or to analyze the results, the interactive Jupyter Notebooks can be used.
+* Plotting Results: Open the notebooks in the [plot/] folder to generate phased transit light curves ([transit_plot.ipynb]), Keplerian RV curves ([radial_velocity_plot.ipynb]), or Mass-Radius diagrams ([diagrams.ipynb]).
+* Interior Structure ([interior_structure_model/]): Run [run_exomdn_lhs6050b.ipynb] to infer the core-mantle-atmosphere composition of the planet based on the best-fit mass and radius, using the ExoMDN machine learning model framework.
