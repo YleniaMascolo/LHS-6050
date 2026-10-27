@@ -67,8 +67,7 @@ The repository is organized as follows:
     └── run_exomdn_lhs6050b.ipynb  # Inference for ExoMDN model using mass radius and equilibrium temperature of LHS 6050b
 ```
 Additional data [here](https://drive.google.com/drive/folders/14kszrij8drW1fSgP8EOUyYQ7x352nvvN?usp=share_link):
-- MCMC joint-fit posteriors from the best-reported model (used in radial_velocity_plot.ipynb)
-- NASA Exoplanet Archive DataFrame (used in diagrams.ipynb) 
+- Joint-fit posteriors from the best-reported circular and eccentric models
 
 ## System Requirements and Installation Guide
 
@@ -89,9 +88,10 @@ Typical install time: 30 minutes.
 * [radvel](https://github.com/California-Planet-Search/radvel)
 * [seaborn](https://github.com/mwaskom/seaborn)
 * [ExoMDN](https://github.com/philippbaumeister/ExoMDN.git)
+* [dynesty](https://github.com/joshspeagle/dynesty)
 
 ```bash
-pip install numpy pandas matplotlib scipy emcee corner astropy batman-package radvel seaborn exomdn
+pip install numpy pandas matplotlib scipy emcee corner astropy batman-package radvel seaborn exomdn dynesty
 ```
 
 ## Instructions for Use
@@ -100,27 +100,26 @@ Before running the code, ensure to have an active Python environment with the re
 
 To run the analysis, you must keep the directory structure of the repository intact. The scripts interact with each other as follows:
 * `datasets/`: Contains all the raw and processed observational data. 
-* `functions/`: Contains the numerical, statistical, and MCMC modules. These python files are core libraries automatically imported by the main execution scripts.
+* `functions/`: Contains the numerical and statistical modules. These python files are core libraries automatically imported by the main execution scripts.
 * `GlobalFit/`: Contains the main executable scripts that orchestrate the entire analysis.
-* `tests/`: Contains a test file for Gaussian Process sensitivity. 
-You do not need to run the files inside `functions/` individually. You only need to execute one of the main scripts inside the `GlobalFit/` or `tests/` directories, depending on the orbital model assumption.
+* `tests/`: Contains scripts for Gaussian Process sensitivity, eccentricity and photometric tests. 
+You do not need to run the files inside `functions/` individually. You only need to execute one of the main scripts (fit) inside the `GlobalFit/` or `tests/` directories, depending on the orbital model assumption.
 
-The script is configured to save all outputs automatically inside the directory specified by `base_dir` (by default configured within the script). Upon successful completion of the MCMC run, the following files will be generated:
-* `chain_plot_circular.pdf`: A multi-panel plot containing the MCMC chains for all free parameters.
-* `corner_plot_circular.pdf`: The final publication-ready corner plot showing the multi-dimensional posterior probability distributions, covariance contours, and median best-fit values overlaid on the histograms.
-* `retrieval_chain_circular.h5`: The main HDF5 backend file that stores the entire state of the sampler.
-* `mcmc_results_circular.npz`: A compressed NumPy binary file containing the raw flattened chains (`chain`) and their corresponding log-probabilities (`log_prob`).
-* `best_fit_results_circular.json`: A structured JSON file containing the complete final data of the system fit:
+The script is configured to save all outputs automatically inside the directory specified by `base_dir` (by default configured within the script). Upon successful completion of the run, the following files will be generated:
+* `chain_plot.pdf`: A multi-panel plot containing the nested sampler chains for all free parameters.
+* `corner_plot.pdf`: The final publication-ready corner plot showing the multi-dimensional posterior probability distributions, covariance contours, and median best-fit values overlaid on the histograms.
+* `dynesty_results.npz`: A compressed NumPy binary file containing the raw flattened chains (`chain`) and their corresponding log-probabilities (`log_prob`).
+* `best_fit_results.json`: A structured JSON file containing the complete final data of the system fit:
     * `fitted_parameters`: Median values, lower bounds (`err_minus`), and upper bounds (`err_plus`) for all the initialised parameters.
     * `derived_parameters`: Physically calculated planetary properties with propagated uncertainties.
-    * `model_statistics`: The final Bayesian Information Criterion (BIC) score.
+    * `model_statistics`: The final Bayesian Evidence (dlogZ) score and the multi-GP information criterion ([MGIC](https://arxiv.org/html/2606.04875v2)).
 
 Once the global fit is complete or to analyze the results, the interactive Jupyter Notebooks can be used.
-* Plotting Results: Open the notebooks in the `plot/` folder to generate phased transit light curves (`transit_plot.ipynb`), Keplerian RV curves (`radial_velocity_plot.ipynb`), or Mass-Radius diagrams (`diagrams.ipynb`).
+* Plotting Results: Open the notebooks in the `plot/` folder to generate phased transit light curves (`transit_plot.ipynb`), RV curves (`rv_plot.ipynb`), or RV pipeline comparison curves (`pipeline_comparison_plot.ipynb`).
 * Interior Structure (`interior_structure_model/`): Run `run_exomdn_lhs6050b.ipynb` to infer the core-mantle-atmosphere composition of the planet based on the best-fit mass and radius, using the ExoMDN machine learning model framework.
 
 ## Demo
 
-To test the pipeline or run a quick validation, you can follow the instructions above and modify the `niter` (MCMC steps) parameter inside the main script.
-Open `GlobalFit/GlobalFit_circular.py` and temporarily lower the number of steps to around 1,000 (instead of the production value 100,000).
-On a standard desktop computer, running 1,000 steps with 8-10 parallel processes (`nproc`) takes approximately 4 to 5 hours. 
+To test the pipeline or run a quick validation, you can follow the instructions above and modify the `nlive` (number of live points for dynesty sampler) inside the main script.
+Open `GlobalFit/GlobalFit.py` and temporarily lower the number of live points to around 100 (instead of the production value 1000).
+On a standard desktop computer, running 100 live points with 8-10 parallel processes (`nproc`) takes approximately 2 to 3 hours. 
