@@ -19,7 +19,7 @@ All primary measurements are paired with their corresponding uncertainty or erro
 | `ha` ± `ha_err` | $\text{H}\alpha$ activity index | Dimensionless |
 | `na` ± `na_err` | Sodium doublet ($\text{Na I D}_1\text{D}_2$) index | Dimensionless |
 | `ca` ± `ca_err` | Calcium ($\text{Ca II}$) index | Dimensionless |
-| `dlw` ± `dlw_err` | Differential Line Width | $\text{m}^2/\text{s}^2$ |
+| `dlw` ± `dlw_err` | Differential Line Width | $\text{km/s}$ |
 | `fwhm_lbl` ± `fwhm_lbl_err` | Full Width at Half Maximum (Line-By-Line) | $\text{km/s}$ |
 
 ---
