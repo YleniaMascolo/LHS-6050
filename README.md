@@ -6,41 +6,63 @@ The repository is organized as follows:
 
 ```text
 ├── GlobalFit/
-│   ├── GlobalFit_circular.py      # MCMC global fit assuming a circular orbit (e=0)
-│   └── GlobalFit_eccentric.py     # MCMC global fit allowing eccentric orbital parameters
+|   ├── circular_fit/
+│   |   ├── GlobalFit_circular.py      # Global fit assuming a circular orbit (e=0)
+|   |   ├── models_circular.py         # Light curve and RV forward models for circular orbits
+|   |   └── stats_circular.py          # Statistical module for circular fits (prior, likelihood, posterior)
+│   └── eccentric_fit/
+|       ├── GlobalFit_eccentric.py     # Global fit allowing eccentric orbital parameters
+|       ├── models_eccentric.py        # Forward models accounting for eccentricity
+|       └── stats_eccentric.py         # Statistical module for eccentric fits (prior, likelihood, posterior)
 │
-├── functions/                     # Core numerical and statistical modules
-│   ├── models_circular.py         # Light curve and RV forward models for circular orbits
-│   ├── models_eccentric.py        # Forward models accounting for eccentricity
-│   ├── emcee_run.py               # Wrapper to execute MCMC sampling via 'emcee' package
-│   ├── multiGP.py                 # Multi-dimensional GPs for stellar activity mitigation
-│   ├── stats_circular.py          # Statistical module for circular fits (prior, likelihood, posterior)
-│   └── stats_eccentric.py         # Statistical module for eccentric fits (prior, likelihood, posterior)
+├── functions/                         
+│   ├── emcee_run.py                   # Wrapper to execute MCMC sampling via 'emcee' package
+│   ├── multiGP.py                     # Multi-dimensional GPs for stellar activity mitigation
+│   └── dynesty_run.py                 # Wrapper to execute DYNESTY sampling via 'dynesty' package
 │
-├── datasets/                      # Raw and processed observational data
-│   ├── TESS/                      # Discovery TESS FITS files (Sectors 4, 31, 42, 70, 71)
-│   ├── LCO/                       # Ground-based follow-up photometry from Las Cumbres Observatory 
-│   ├── TRAPPIST/                  # Ground-based transit photometry from TRAPPIST-South
-│   ├── NGTS/                      # Ground-based light curves from NGTS
-│   ├── MINERVA/                   # Ground-based MINERVA-Australis data 
-│   ├── ESPRESSO/                  # RV measurements from ESPRESSO (multiple reduction pipelines)
-│   ├── RV_best_fit_pipelines/     # Best-fit RV extractions (LBL, S-BART, ESP, GZ our pipeline)
-│   ├── zeng_curves/               # Theoretical composition tracks (Zeng et al. 2019)
-│   ├── processed_data/            # Scripts and pickle files containing processed data
-│   └── best_fit_results.json      # Final joint-fit parameters from the best-reported model 
+├── datasets/                      
+│   ├── TESS/                          # Discovery TESS FITS files (Sectors 4, 31, 42, 70, 71)
+│   ├── LCO/                           # Ground-based follow-up photometry from Las Cumbres Observatory 
+│   ├── TRAPPIST/                      # Ground-based transit photometry from TRAPPIST-South
+│   ├── NGTS/                          # Ground-based light curves from NGTS
+│   ├── MINERVA/                       # Ground-based MINERVA-Australis data 
+│   ├── ESPRESSO/                      # RV measurements from ESPRESSO (multiple reduction pipelines, red and blue datasets from self reduction)
+│   ├── pipeline_comparison/           # Global best-fits (eccentric model) assuming different RV extractions (LBL, S-BART, ESP, our pipeline)
+│   ├── zeng_curves/                   # Theoretical composition tracks (Zeng et al. 2019)
+│   ├── processed_data/                # Script and pickle file containing processed data
+|   ├── best_fit_results_circular.json   # Final joint-fit parameters from the best-reported circular model 
+│   └── best_fit_results_eccentric.json  # Final joint-fit parameters from the best-reported eccentric model 
 │
-├── plot/                          # Visualization and diagnostic Jupyter notebooks
-│   ├── transit_plot.ipynb         # Photometric phased transits and residuals
-│   ├── radial_velocity_plot.ipynb # Radial velocity Keplerian curves and phase-folds
-│   ├── gls_periodogram.ipynb      # Generalized Lomb-Scargle periodograms 
-│   ├── pipeline_comparison_plot.ipynb # Visual assessment of different RV extraction techniques
-│   └── diagrams.ipynb             # M-R and M-density diagrams, HZ and system overview
-│
-├── tests/
-│   └── recovery_injection.py      # Injection-recovery tests to validate GP sensitivity
+├── plot/                         
+│   ├── transit_plot.ipynb             # Photometric phased transits and residuals
+│   ├── rv_plot.ipynb                  # Radial velocity phase-folds and injection recovery 
+│   └── pipeline_comparison_plot.ipynb # Radial velocity phase-folds using different RV extraction techniques
 |
-└── interior_structure_model/      # Folder with PDF plots and Jupyter notebooks for interior structure model using ExoMDN
-    ├── lhs6050b_samples.parquet   # Output from ExoMDN model in .ipynb 
+├── tests/
+|   ├── eccentricity_contribution/
+|   |   ├── photometry/
+│   |   |   ├── fit_only_photometry.py  # Fit assuming an eccentric orbit and only photometric datasets
+|   |   |   └── stats_only_photometry.py # Statistical module for eccentric fit with only photometric datasets
+|   |   └── radial_velocity/
+│   |       ├── fit_only_rv.py          # Fit assuming an eccentric orbit and only radial velocity datasets
+|   |       └── stats_only_rv.py        # Statistical module for eccentric fit with only radial velocity datasets
+|   | 
+│   ├── recovery_injection/
+|   |   └── GlobalFit_eccentric_recovery_injection.py  # Injection-recovery tests to validate GP sensitivity
+|   |
+|   ├── photometry_single_instrument/
+|   |   ├── fit_phot_single.py          # Fit assuming a circular orbit and only one photometric dataset. Used for testing detrending parameters
+|   |   └── stats_phot_single.py        # Statistical module for circular orbit and only one photometric dataset
+|   |
+|   └── stellar_indicators/             # Test different combination of stellar activity indicators for circular and eccentric models
+|       ├── rv_only_circular/           
+│       |   ├── fit_rv_only_circular.py # Fit assuming a circular orbit and only rv datasets
+|       |   └── stats_rv_only_circular.py # Statistical module for circular orbit and only rv datasets
+|       └── rv_only_eccentric/           
+│           ├── fit_rv_only_eccentric.py # Fit assuming an eccentric orbit and only rv datasets
+|           └── stats_rv_only_eccentric.py # Statistical module for eccentric orbit and only rv datasets
+|
+└── interior_structure_model/     
     ├── plot_ridge_lhs6050b.ipynb  # Ridgeplot and the standard ExoMDN cornerplot
     └── run_exomdn_lhs6050b.ipynb  # Inference for ExoMDN model using mass radius and equilibrium temperature of LHS 6050b
 ```
